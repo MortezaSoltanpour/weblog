@@ -11,13 +11,15 @@
   "author": "Morteza Soltanpour",
   "license": "MIT",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "dotenv": "^16.0.1",
     "ejs": "^3.1.8",
     "express": "^4.18.1",
     "express-ejs-layouts": "^2.5.1",
     "mongoose": "^6.5.2",
     "morgan": "^1.10.0",
-    "nodemon": "^2.0.19"
+    "nodemon": "^2.0.19",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "cross-env": "^7.0.3"

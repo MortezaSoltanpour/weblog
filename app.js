@@ -35,7 +35,7 @@ app.use("/users", require("./routes/users"));
 app.use("/dashboard", require("./routes/dashboard"));
 
 app.use((req, res) => {
-  res.status(404).render("404", { pageTitle: "Page not found", path: "404" });
+  res.status(404).render("404", { pageTitle: "Page not found", path: "/404" });
 });
 
 const PORT = process.env.PORT || 3000;
