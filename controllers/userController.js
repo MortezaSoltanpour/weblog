@@ -3,7 +3,11 @@ const bcrypt = require("bcryptjs");
 const User = require("../models/User");
 
 exports.login = (req, res) => {
-  res.render("login", { pageTitle: "ورود به بخش مدیریت", path: "/login" });
+  res.render("login", {
+    pageTitle: "ورود به بخش مدیریت",
+    path: "/login",
+    message: req.flash("success_msg"),
+  });
 };
 
 exports.register = (req, res) => {
@@ -39,6 +43,9 @@ exports.createUser = async (req, res) => {
     });
 
     //await User.create(req.body);
+
+    req.flash("success_msg", "ثبت نام با موفقیت انجام شد");
+
     res.redirect("/users/login");
   } catch (err) {
     if (err.inner) {
