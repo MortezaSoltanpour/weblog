@@ -14,10 +14,30 @@ exports.login = (req, res) => {
 
 exports.handleLogin = (rqr, res, next) => {
   passport.authenticate("local", {
-    successRedirect: "/dashboard",
+    // successRedirect: "/dashboard",
     failureRedirect: "/users/login",
     failureFlash: true,
   })(rqr, res, next);
+};
+
+exports.rememberMe = (req, res) => {
+  if (req.body.remember) {
+    req.session.cookie.originalMaxAge = 24 * 60 * 60 * 1000;
+  } else {
+    req.session.cookie.expire = null;
+  }
+
+  res.redirect("/dashboard");
+};
+
+exports.logout = (req, res, next) => {
+  req.logout(function (err) {
+    if (err) {
+      return next(err);
+    }
+    req.flash("success_msg", "خروج موفقیت آمیز بود");
+    res.redirect("/users/login");
+  });
 };
 
 exports.register = (req, res) => {

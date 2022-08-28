@@ -9,6 +9,7 @@ router.get("/", authenticated, (req, res) => {
     pageTitle: "بخش مدیریت | داشبورد",
     path: "/dashboard",
     layout: "./layouts/dashLayout",
+    fullname: req.user.fullname,
   });
 });
 
