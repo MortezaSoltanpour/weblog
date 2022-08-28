@@ -6,12 +6,16 @@ const dotEnv = require("dotenv");
 const morgan = require("morgan");
 const flash = require("connect-flash");
 const session = require("express-session");
+const passport = require("passport");
 
 const connectDB = require("./config/db");
 
 // Load Config
 dotEnv.config({ path: "./config/config.env" });
 connectDB();
+
+// Passport configuration
+require("./config/passport");
 
 const app = express();
 
@@ -37,6 +41,10 @@ app.use(
     resave: false,
   })
 );
+
+// passport
+app.use(passport.initialize());
+app.use(passport.session());
 
 // flash
 app.use(flash());

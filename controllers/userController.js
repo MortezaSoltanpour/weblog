@@ -1,4 +1,5 @@
 const bcrypt = require("bcryptjs");
+const passport = require("passport");
 
 const User = require("../models/User");
 
@@ -7,7 +8,16 @@ exports.login = (req, res) => {
     pageTitle: "ورود به بخش مدیریت",
     path: "/login",
     message: req.flash("success_msg"),
+    error: req.flash("error"),
   });
+};
+
+exports.handleLogin = (rqr, res, next) => {
+  passport.authenticate("local", {
+    successRedirect: "/dashboard",
+    failureRedirect: "/users/login",
+    failureFlash: true,
+  })(rqr, res, next);
 };
 
 exports.register = (req, res) => {
