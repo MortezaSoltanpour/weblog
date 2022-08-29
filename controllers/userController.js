@@ -1,5 +1,6 @@
-const bcrypt = require("bcryptjs");
 const passport = require("passport");
+const fetch = require("node-fetch");
+const bcrypt = require("bcryptjs");
 
 const User = require("../models/User");
 
@@ -12,12 +13,35 @@ exports.login = (req, res) => {
   });
 };
 
-exports.handleLogin = (rqr, res, next) => {
-  passport.authenticate("local", {
-    // successRedirect: "/dashboard",
-    failureRedirect: "/users/login",
-    failureFlash: true,
-  })(rqr, res, next);
+exports.handleLogin = async (req, res, next) => {
+  if (!req.body["g-recaptcha-response"]) {
+    req.flash("error", "لطفاً تیک من ربات نیستم را بزنید");
+    return res.redirect("/users/login");
+  }
+  const secretKey = process.env.CAPTCHA_SECRET;
+  const verifyUrl = `https://google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${req.body["g-recaptcha-response"]}
+  &remoteip=${req.connection.remoteAddress}`;
+
+  const response = await fetch(verifyUrl, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "content-type": "application/x-www-form-urlencoded;charset=utf-8",
+    },
+  });
+
+  const json = await response.json();
+  console.log(json);
+  if (json.success) {
+    passport.authenticate("local", {
+      // successRedirect: "/dashboard",
+      failureRedirect: "/users/login",
+      failureFlash: true,
+    })(req, res, next);
+  } else {
+    req.flash("error", "مشکلی در اعتبار سنجی پیش آمده");
+    return res.redirect("/users/login");
+  }
 };
 
 exports.rememberMe = (req, res) => {

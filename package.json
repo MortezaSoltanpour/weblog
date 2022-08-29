@@ -5,16 +5,19 @@
   "main": "app.js",
   "scripts": {
     "start": "cross-env NODE_ENV=production node app",
-    "dev": "cross-env NODE_ENV=development nodemon app"
+    "dev": "cross-env NODE_ENV=development DEBUG=weblog-project nodemon app"
   },
   "keywords": [],
   "author": "Morteza Soltanpour",
   "license": "MIT",
   "dependencies": {
+    "app-root-path": "^3.1.0",
     "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.0",
     "connect": "^3.7.0",
     "connect-flash": "^0.1.1",
     "connect-mongo": "^4.6.0",
+    "debug": "^4.3.4",
     "dotenv": "^16.0.1",
     "ejs": "^3.1.8",
     "express": "^4.18.1",
@@ -23,9 +26,11 @@
     "mongo": "^0.1.0",
     "mongoose": "^6.5.2",
     "morgan": "^1.10.0",
+    "node-fetch": "^2.6.7",
     "nodemon": "^2.0.19",
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
+    "winston": "^3.8.1",
     "yup": "^0.32.11"
   },
   "devDependencies": {
