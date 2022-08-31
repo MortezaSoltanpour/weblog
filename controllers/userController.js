@@ -31,7 +31,6 @@ exports.handleLogin = async (req, res, next) => {
   });
 
   const json = await response.json();
-  console.log(json);
   if (json.success) {
     passport.authenticate("local", {
       // successRedirect: "/dashboard",
