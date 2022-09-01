@@ -1,4 +1,5 @@
 const Blog = require("../models/Blog");
+const { formatDate } = require("../utils/jalali");
 
 exports.getDashboard = async (req, res) => {
   try {
@@ -9,6 +10,7 @@ exports.getDashboard = async (req, res) => {
       layout: "./layouts/dashlayout",
       fullname: req.user.fullname,
       blogs,
+      formatDate,
     });
   } catch (error) {}
 };

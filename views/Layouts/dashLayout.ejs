@@ -27,6 +27,11 @@
         </style>
         <link href="/css/dashboard.css" rel="stylesheet" />
         <link rel="stylesheet" href="/css/styles.css" />
+        <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/ckeditor/4.15.1/ckeditor.js"
+        integrity="sha512-aThGT4RJc95+zt2vrs8iMjrFpsJxcFclp7tweVls6/3cNo3GWvGvtLV576o8Kdvdf3fJhrrG3wkmoea/KJMLFQ=="
+        crossorigin="anonymous"
+    ></script>
     </head>
     <body class="rtl">
         <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
@@ -67,6 +72,11 @@
         </main>
     </div>
 </div>
+<script>
+    CKEDITOR.replace("body",{
+        language:"fa"
+    })
+</script>
 <script src="/js/jquery.slim.min.js"></script>
 <script src="/js/bootstrap.bundle.min.js"></script>
 
