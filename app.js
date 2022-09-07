@@ -42,8 +42,9 @@ app.use(bodyParser.json());
 // session
 app.use(
   session({
-    secret: "secret",
+    secret: process.env.SESSION_SECRET,
     saveUninitialized: false,
+    unset: "destroy",
     resave: false,
     store: MongoStore.create({
       mongoUrl: process.env.MONGO_URI,
@@ -66,9 +67,7 @@ app.use("/", require("./routes/blog"));
 app.use("/users", require("./routes/users"));
 app.use("/dashboard", require("./routes/dashboard"));
 
-app.use((req, res) => {
-  res.status(404).render("404", { pageTitle: "Page not found", path: "/404" });
-});
+app.use(require("./controllers/errorController").get404);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () =>

@@ -58,9 +58,10 @@ exports.logout = (req, res, next) => {
     if (err) {
       return next(err);
     }
-    req.flash("success_msg", "خروج موفقیت آمیز بود");
-    res.redirect("/users/login");
   });
+  req.session = null;
+  //req.flash("success_msg", "خروج موفقیت آمیز بود");
+  res.redirect("/users/login");
 };
 
 exports.register = (req, res) => {
