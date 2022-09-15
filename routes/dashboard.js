@@ -16,4 +16,8 @@ router.get("/add-post", authenticated, adminController.getAddPost);
 //  @route  POST /dashboard/add-post
 router.post("/add-post", authenticated, adminController.createPost);
 
+//  @desc   Dashboard Handle Image Upload
+//  @route  POST /dashboard/image-upload
+router.post("/image-upload", authenticated, adminController.uploadImage);
+
 module.exports = router;
