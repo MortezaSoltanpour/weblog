@@ -70,11 +70,14 @@ exports.uploadImage = (req, res) => {
 
   upload(req, res, async (err) => {
     if (err) {
+      if (err.code === "LIMIT_FILE_SIZE") {
+        return res
+          .status(400)
+          .send("حجم عکس ارسالی نباید بیشتر از 4 مگابایت باشد");
+      }
       res.send(err);
     } else {
       if (req.file) {
-        console.log(req.file);
-
         const filename = `${uuid()}_${req.file.originalname}`;
         await sharp(req.file.buffer)
           .jpeg({
@@ -82,7 +85,7 @@ exports.uploadImage = (req, res) => {
           })
           .toFile(`./public/uploads/${filename}`)
           .catch((err) => console.log(err));
-        res.status(200).send("آپلود عکس موفقیت آمیز بود");
+        res.status(200).send(`http://localhost:3000/uploads/${filename}`);
       } else {
         res.send("جهت آپلود باید عکسی انتخاب کنید");
       }
