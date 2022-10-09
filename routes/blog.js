@@ -1,22 +1,11 @@
 const { Router } = require("express");
-const { authenticate } = require("../middlewares/auth");
+
+const blogController = require("../controllers/blogController");
 
 const router = new Router();
 
 //  @desc   Weblog Index Page
 //  @route  GET /
-router.get("/", (req, res) => {
-  var fullname = "aa";
-  if (req.isAuthenticated()) {
-    fullname = req.user.fullname;
-  }
-
-  res.render("index", {
-    pageTitle: "وبلاگ",
-    path: "/",
-    islogin: req.isAuthenticated(),
-    fullname: fullname,
-  });
-});
+router.get("/", blogController.getIndex);
 
 module.exports = router;
