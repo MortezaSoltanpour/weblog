@@ -67,6 +67,8 @@ app.use("/", require("./routes/blog"));
 app.use("/users", require("./routes/users"));
 app.use("/dashboard", require("./routes/dashboard"));
 
+app.use("/errors", require("./routes/errors"));
+
 app.use(require("./controllers/errorController").get404);
 
 const PORT = process.env.PORT || 3000;

@@ -1,3 +1,5 @@
+<% var index = (currentPage-1) * postPerPage + 1 %> 
+
 <% if (blogs.length > 0) { %>
     <h2 class="mt-2">آخرین پست ها</h2>
     <div class="table-responsive">
@@ -14,7 +16,7 @@
             <tbody>
                 <% for (let blog of blogs) { %>
                 <tr>
-                    <td>1</td>
+                    <td><%= index %> </td>
                     <td><a href="/blogs/<%= blog._id %>"></a><%= blog.title %></td>
                     <td><%= formatDate(blog.createdAt) %></td>
                     <td>
@@ -27,7 +29,7 @@
                         <a href="/dashboard/delete-post/<%= blog._id %>" class="btn btn-sm btn-danger">حذف</a>
                     </td>
                 </tr>
-                <% } %>
+                <% index++; } %>
             </tbody>
         </table>
         <%- include("../includes/pagination.ejs") %>

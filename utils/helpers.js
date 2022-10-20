@@ -8,3 +8,18 @@ exports.truncate = (str, len) => {
   }
   return str;
 };
+
+exports.correctUrl = (url) => {
+  url = url
+    .replace(" ", "-")
+    .replace("/", "-")
+    .replace("@", "-")
+    .replace("!", "-")
+    .replace("#", "-")
+    .replace("$", "-")
+    .replace("%", "-")
+    .replace("&", "-")
+    .replace("+", "-")
+    .replace("*", "-");
+  return url;
+};
