@@ -1,7 +1,7 @@
 const multer = require("multer");
 const sharp = require("sharp");
 const uuid = require("uuid").v4;
-
+const appRoot = require("app-root-path");
 const Blog = require("../models/Blog");
 const { formatDate } = require("../utils/jalali");
 
@@ -90,9 +90,21 @@ exports.editPost = async (req, res) => {
       return res.redirect("/dashboard");
     } else {
       const { title, status, body } = req.body;
+      const prevThumb = post.thumbnail;
       post.title = title;
       post.status = status;
       post.body = body;
+
+      const thumbnail = req.files ? req.files.thumbnail : {};
+      if (req.files) {
+        const fileName = `${uuid()}_${thumbnail.name}`;
+        const uploadPath = `${appRoot}/public/uploads/thumbnails/${fileName}`;
+        await sharp(thumbnail.data)
+          .jpeg({ quality: 60 })
+          .toFile(uploadPath)
+          .catch((err) => console.log(err));
+        post.thumbnail = fileName;
+      }
 
       await post.save();
 
@@ -132,10 +144,20 @@ exports.deletePost = async (req, res) => {
 
 exports.createPost = async (req, res) => {
   const errorArr = [];
+  const thumbnail = req.files ? req.files.thumbnail : {};
+  const fileName = `${uuid()}_${thumbnail.name}`;
+  const uploadPath = `${appRoot}/public/uploads/thumbnails/${fileName}`;
 
   try {
+    req.body = { ...req.body, thumbnail };
+
+    await sharp(thumbnail.data)
+      .jpeg({ quality: 60 })
+      .toFile(uploadPath)
+      .catch((err) => console.log(err));
+
     await Blog.postValidation(req.body);
-    await Blog.create({ ...req.body, user: req.user.id });
+    await Blog.create({ ...req.body, user: req.user.id, thumbnail: fileName });
   } catch (err) {
     console.log(err);
     //get500(req, res);

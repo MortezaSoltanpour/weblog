@@ -1,5 +1,7 @@
 const path = require("path");
 
+const fileUpload = require("express-fileupload");
+
 const debug = require("debug")("weblog-project");
 const express = require("express");
 const mongoose = require("mongoose");
@@ -35,9 +37,11 @@ app.set("layout", "./Layouts/mainLayout");
 app.set("view engine", "ejs");
 app.set("views", "views");
 
+// express fileupload
+app.use(fileUpload());
 // Body Parser
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
 // session
 app.use(
