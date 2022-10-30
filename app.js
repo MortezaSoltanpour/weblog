@@ -29,7 +29,7 @@ const app = express();
 // Logging
 if (process.env.NODE_ENV === "development") {
   debug("nodemon enabled");
-  app.use(morgan("combined", { stream: winston.stream }));
+  // app.use(morgan("combined", { stream: winston.stream }));
 }
 // View engine
 app.use(expressLayout);

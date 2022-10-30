@@ -25,6 +25,7 @@
     "express-fileupload": "^1.4.0",
     "express-session": "^1.17.3",
     "jalali-moment": "^3.3.11",
+    "jsonwebtoken": "^8.5.1",
     "mongo": "^0.1.0",
     "mongoose": "^6.5.2",
     "morgan": "^1.10.0",

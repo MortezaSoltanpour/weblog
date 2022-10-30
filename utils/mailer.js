@@ -2,28 +2,25 @@ const nodeMailer = require("nodemailer");
 const smtpTransport = require("nodemailer-smtp-transport");
 
 const transporterDetails = smtpTransport({
-  host: "mail.mishakoosha.com",
-  port: 25,
-  secure: false,
+  host: "mail.ghorbany.dev",
+  port: 465,
+  secure: true,
   auth: {
-    user: "info@mishakoosha.com",
-    pass: "mishakoosha.com1!",
+    user: "toplearn@ghorbany.dev",
+    pass: "toplearn123456",
   },
   tls: {
     rejectUnauthorized: false,
   },
 });
 
-const transporter = nodeMailer.createTransport(transporterDetails);
-
-const options = {
-  from: "info@mishakoosha.com",
-  to: "info@mehreganwork.ir",
-  subject: "Nodemailer Test",
-  text: "Simple Test Of Nodemailer",
+exports.sendEmail = (email, fullname, subject, message) => {
+  const transporter = nodeMailer.createTransport(transporterDetails);
+  transporter.sendMail({
+    from: "toplearn@ghorbany.dev",
+    to: email,
+    subject: subject,
+    html: `<h1> سلام ${fullname}</h1>
+            <p>${message}</p>`,
+  });
 };
-
-transporter.sendMail(options, (err, info) => {
-  if (err) return console.log(err);
-  console.log(info);
-});
