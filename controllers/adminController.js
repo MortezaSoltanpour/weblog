@@ -1,12 +1,15 @@
+const fs = require("fs");
 const multer = require("multer");
 const sharp = require("sharp");
 const uuid = require("uuid").v4;
 const appRoot = require("app-root-path");
 const Blog = require("../models/Blog");
 const { formatDate } = require("../utils/jalali");
+var path = require("path");
 
 const { get500 } = require("./errorController");
 const { storage, fileFilter } = require("../utils/multer");
+const util = require("../utils/helpers");
 
 exports.getDashboard = async (req, res) => {
   const page = +req.query.page || 1;
@@ -81,6 +84,10 @@ exports.editPost = async (req, res) => {
 
   const post = await Blog.findOne({ _id: req.params.id });
   try {
+    const thumbnail = req.files
+      ? req.files.thumbnail
+      : { name: post.thumbnail, size: 10, mimetype: "image/jpeg" };
+    req.body = { ...req.body, thumbnail };
     await Blog.postValidation(req.body);
 
     if (!post) {
@@ -90,14 +97,22 @@ exports.editPost = async (req, res) => {
       return res.redirect("/dashboard");
     } else {
       const { title, status, body } = req.body;
-      const prevThumb = post.thumbnail;
+
       post.title = title;
       post.status = status;
       post.body = body;
 
-      const thumbnail = req.files ? req.files.thumbnail : {};
       if (req.files) {
-        const fileName = `${uuid()}_${thumbnail.name}`;
+        fs.unlink(
+          `${appRoot}/public/uploads/thumbnails/${post.thumbnail}`,
+          async (err) => {
+            if (err) console.log(err);
+          }
+        );
+
+        const fileName = `${util.replaceAll(uuid(), "-", "")}${path.extname(
+          thumbnail.name
+        )}`;
         const uploadPath = `${appRoot}/public/uploads/thumbnails/${fileName}`;
         await sharp(thumbnail.data)
           .jpeg({ quality: 60 })
@@ -133,8 +148,15 @@ exports.editPost = async (req, res) => {
 
 exports.deletePost = async (req, res) => {
   try {
-    const result = await Blog.findByIdAndRemove(req.params.id);
-    console.log(result);
+    const post = await Blog.findOne({ _id: req.params.id });
+    fs.unlink(
+      `${appRoot}/public/uploads/thumbnails/${post.thumbnail}`,
+      async (err) => {
+        if (err) console.log(err);
+        else await Blog.findByIdAndRemove(req.params.id);
+      }
+    );
+
     res.redirect("/dashboard");
   } catch (err) {
     console.log(err);
@@ -145,28 +167,34 @@ exports.deletePost = async (req, res) => {
 exports.createPost = async (req, res) => {
   const errorArr = [];
   const thumbnail = req.files ? req.files.thumbnail : {};
-  const fileName = `${uuid()}_${thumbnail.name}`;
+  const fileName = `${util.replaceAll(uuid(), "-", "")}${path.extname(
+    thumbnail.name
+  )}`;
   const uploadPath = `${appRoot}/public/uploads/thumbnails/${fileName}`;
 
   try {
     req.body = { ...req.body, thumbnail };
+
+    await Blog.postValidation(req.body);
 
     await sharp(thumbnail.data)
       .jpeg({ quality: 60 })
       .toFile(uploadPath)
       .catch((err) => console.log(err));
 
-    await Blog.postValidation(req.body);
     await Blog.create({ ...req.body, user: req.user.id, thumbnail: fileName });
   } catch (err) {
     console.log(err);
     //get500(req, res);
-    err.inner.forEach((e) => {
-      errorArr.push({
-        name: e.path,
-        message: e.message,
+
+    if (err.inner) {
+      err.inner.forEach((e) => {
+        errorArr.push({
+          name: e.path,
+          message: e.message,
+        });
       });
-    });
+    }
     res.render("private/addPost", {
       pageTitle: "بخش مدیریت | ساخت پست جدید",
       path: "/dashboard/add-post",

@@ -23,3 +23,7 @@ exports.correctUrl = (url) => {
     .replace("*", "-");
   return url;
 };
+
+exports.replaceAll = (str, search, replace) => {
+  return str.split(search).join(replace);
+};

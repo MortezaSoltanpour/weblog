@@ -10,4 +10,15 @@ exports.schema = Yup.object().shape({
     ["public", "private"],
     "یکی از 2 وضعیت خصوصی یا عمومی را انتخاب کنید"
   ),
+  thumbnail: Yup.object().shape({
+    name: Yup.string().required("عکس الزامی می باشد"),
+    size: Yup.number().max(
+      3 * 1024 * 1024,
+      "عکس نباید بیشتر از 3 مگابایت باشد"
+    ),
+    mimetype: Yup.mixed().oneOf(
+      ["image/jpeg", "image/png"],
+      "تنها پسوندهای png و jpeg پشتیبانی می شوند"
+    ),
+  }),
 });

@@ -1,10 +1,42 @@
+<style>
+    .postBackBlur{
+        height: 400px;
+        background-size: auto;
+        background-position: center;
+        background-repeat: no-repeat;
+        filter: blur(5px);
+        padding: 10px;
+        text-align: center;
+    }
+
+    .imageThumb{
+        height: 100%;
+        width: auto;
+        border-radius: 5px;
+    }
+
+    .imageWrapper{
+        height: 400px;
+        text-align: center;
+        position: absolute;
+        padding: 10px;
+        width: 100%;
+    }
+</style>
+
 <% if(posts.length > 0) { %> <% for(let post of posts) { %>
     <div class="card mt-4 mb-4">
+        <div class="postBackBlur" style="background-image:url('/uploads/thumbnails/<%= post.thumbnail %>') ;">
+        </div>
+
+        <div class="imageWrapper">
         <img
-            class="card-img-top"
-            src="http://placehold.it/750x300"
+            class="imageThumb card-img-top"
+            src="/uploads/thumbnails/<%= post.thumbnail %>"
             alt="Card image cap"
         />
+    </div>
+   
         <div class="card-body">
             <h2 class="card-title"><%= post.title %></h2>
             <p class="card-text text-justify"><%- truncate(post.body,400) %></p>
