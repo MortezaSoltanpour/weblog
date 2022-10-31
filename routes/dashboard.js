@@ -32,4 +32,8 @@ router.post("/edit-post/:id", authenticated, adminController.editPost);
 //  @route  POST /dashboard/image-upload
 router.post("/image-upload", authenticated, adminController.uploadImage);
 
+//  @desc   Dashboard Handle Search
+//  @route  POST /dashboard/search
+router.post("/search", authenticated, adminController.handleDashSearch);
+
 module.exports = router;
