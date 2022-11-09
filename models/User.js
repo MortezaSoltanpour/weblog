@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-//const Yup = require("yup");
 const { schema } = require("./secure/userValidation");
 const bcrypt = require("bcryptjs");
 
